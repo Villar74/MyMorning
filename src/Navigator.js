@@ -5,44 +5,46 @@
  */
 
 import React from "react";
-import {TabNavigator} from 'react-navigation'; // 1.0.0-beta.14
-import HomeScreen from './mainScreen/HomeScreen';
-import Settings from './settings/Settings';
-import { Icon } from 'react-native-elements';
+import { TabNavigator } from "react-navigation"; // 1.0.0-beta.14
+import HomeScreen from "./mainScreen/HomeScreen";
+import Settings from "./settings/Settings";
+import { Icon } from "react-native-elements";
 
-
-const Navigator = TabNavigator({
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-      tabBarLabel: 'Home',
-      tabBarIcon: ({tintColor}) => (
-        <Icon name={'alarm'} size={20} color={tintColor}/>
-      ),
+const Navigator = TabNavigator(
+  {
+    Home: {
+      screen: HomeScreen,
+      navigationOptions: {
+        tabBarLabel: "Home",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name={"alarm"} size={20} color={tintColor} />
+        )
+      }
     },
+    Settings: {
+      screen: Settings,
+      navigationOptions: {
+        tabBarLabel: "Settings",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name={"settings"} size={20} color={tintColor} />
+        )
+      }
+    }
   },
-  Settings: {
-    screen: Settings,
-    navigationOptions: {
-      tabBarLabel: 'Settings',
-      tabBarIcon: ({tintColor}) => (
-        <Icon name={'settings'} size={20} color={tintColor}/>
-      ),
-    },
-  },
-}, {
-  tabBarPosition: 'bottom',
-  tabBarOptions: {
-    labelStyle: {
-      fontSize: 12,
-    },
-    tabStyle: {
-      flex: 1,
-      flexDirection: 'row'
-    },
-    showIcon: true
+  {
+    tabBarPosition: "bottom",
+    tabBarOptions: {
+      labelStyle: {
+        fontSize: 12
+      },
+      tabStyle: {
+        flex: 1,
+        flexDirection: "row"
+      },
+      showIcon: true
+    }
   }
-});
+);
 
 export default Navigator;
 

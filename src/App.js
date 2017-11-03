@@ -1,7 +1,10 @@
 import React from "react";
-import Navigator from './Navigator'; // 1.0.0-beta.14
-import { GoogleAnalyticsTracker, GoogleAnalyticsSettings } from 'react-native-google-analytics-bridge';
-const GA_TRACKING_ID = 'UA-105959733-1';
+import Navigator from "./Navigator"; // 1.0.0-beta.14
+import {
+  GoogleAnalyticsTracker,
+  GoogleAnalyticsSettings
+} from "react-native-google-analytics-bridge";
+const GA_TRACKING_ID = "UA-105959733-1";
 const tracker = new GoogleAnalyticsTracker(GA_TRACKING_ID);
 GoogleAnalyticsSettings.setDispatchInterval(2);
 
