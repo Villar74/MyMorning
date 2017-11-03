@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { Icon, Button } from "react-native-elements";
 import { GoogleAnalyticsTracker } from "react-native-google-analytics-bridge";
 let tracker = new GoogleAnalyticsTracker("UA-105959733-1");
-//todo отдельный компонент для трекинга
+//todo отдельный компонент для трекинга, настроить тесты
 export default class HomeScreen extends Component<{}> {
   render() {
     return (
