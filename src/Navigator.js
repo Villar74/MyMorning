@@ -5,15 +5,43 @@
  */
 
 import React from "react";
-import { TabNavigator } from "react-navigation"; // 1.0.0-beta.14
+import { StackNavigator, TabNavigator } from "react-navigation"; // 1.0.0-beta.14
 import HomeScreen from "./mainScreen/HomeScreen";
 import Settings from "./settings/Settings";
+import Stack from "./settings/Stack";
 import { Icon } from "react-native-elements";
+
+const HomeTab = StackNavigator({
+  Home: {
+    screen: HomeScreen,
+    path: '/',
+    navigationOptions: () => ({
+      title: 'Home',
+    }),
+  },
+});
+
+const SettingsTab = StackNavigator({
+  Settings: {
+    screen: Settings,
+    path: '/',
+    navigationOptions: () => ({
+      title: 'Settings',
+    }),
+  },
+  Stack: {
+    screen: Stack,
+    navigationOptions: {
+      title: 'Stack',
+    },
+  },
+});
 
 const Navigator = TabNavigator(
   {
     Home: {
-      screen: HomeScreen,
+      screen: HomeTab,
+      path: '/',
       navigationOptions: {
         tabBarLabel: "Home",
         tabBarIcon: ({ tintColor }) => (
@@ -22,7 +50,8 @@ const Navigator = TabNavigator(
       }
     },
     Settings: {
-      screen: Settings,
+      screen: SettingsTab,
+      path: '/settings',
       navigationOptions: {
         tabBarLabel: "Settings",
         tabBarIcon: ({ tintColor }) => (

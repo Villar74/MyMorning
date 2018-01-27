@@ -5,22 +5,30 @@
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
 		"android": "react-native run-android",
+		"log": "adb logcat *:S ReactNative:V ReactNativeJS:V",
 		"build:android": "cd android && ./gradlew assembleRelease",
 		"reinstall": "rm -rf node_modules; yarn cache clean; yarn install",
 		"android-release": "react-native run-android --variant=release",
 		"prettier": "prettier --write `find src -name \"*.js\"`",
 		"test:coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
-		"test": "jest"
+		"test": "jest",
+		"kill": "sudo lsof -i :8081",
+		"killing": "kill -9 <PID>"
 	},
 	"dependencies": {
+		"@shoutem/ui": "^0.23.0",
 		"moment": "^2.19.1",
-		"react": "16.0.0-beta.5",
-		"react-native": "0.49.5",
+		"react": "16.2.0",
+		"react-native": "0.52.1",
+		"react-native-action-button": "^2.8.1",
 		"react-native-device-info": "^0.12.1",
 		"react-native-elements": "^0.17.0",
+		"react-native-gifted-chat": "^0.3.0",
+		"react-native-git-upgrade": "^0.2.7",
 		"react-native-google-analytics-bridge": "^5.3.3",
+		"react-native-image-picker": "^0.26.7",
 		"react-native-vector-icons": "^4.4.2",
-		"react-navigation": "^1.0.0-beta.16"
+		"react-navigation": "^1.0.0-beta.17"
 	},
 	"devDependencies": {
 		"babel-jest": "21.2.0",
