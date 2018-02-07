@@ -5,11 +5,12 @@
  */
 
 import React from "react";
-import { StackNavigator, TabNavigator } from "react-navigation"; // 1.0.0-beta.14
+import {StackNavigator, TabNavigator} from "react-navigation"; // 1.0.0-beta.14
 import HomeScreen from "./mainScreen/HomeScreen";
 import Settings from "./settings/Settings";
-import Stack from "./settings/Stack";
-import { Icon } from "react-native-elements";
+import Chat from "./settings/Chat";
+import {Icon} from "react-native-elements";
+import {withMappedNavigationProps} from 'react-navigation-props-mapper'
 
 const HomeTab = StackNavigator({
   Home: {
@@ -29,13 +30,17 @@ const SettingsTab = StackNavigator({
       title: 'Settings',
     }),
   },
-  Stack: {
-    screen: Stack,
+  Chat: {
+    screen: withMappedNavigationProps(Chat),
     navigationOptions: {
-      title: 'Stack',
+      title: 'Chat',
     },
   },
 });
+
+function createComponent(instance, props) {
+  return () => React.createElement(instance, props);
+}
 
 const Navigator = TabNavigator(
   {
@@ -44,8 +49,8 @@ const Navigator = TabNavigator(
       path: '/',
       navigationOptions: {
         tabBarLabel: "Home",
-        tabBarIcon: ({ tintColor }) => (
-          <Icon name={"alarm"} size={20} color={tintColor} />
+        tabBarIcon: ({tintColor}) => (
+          <Icon name={"alarm"} size={20} color={tintColor}/>
         )
       }
     },
@@ -54,8 +59,8 @@ const Navigator = TabNavigator(
       path: '/settings',
       navigationOptions: {
         tabBarLabel: "Settings",
-        tabBarIcon: ({ tintColor }) => (
-          <Icon name={"settings"} size={20} color={tintColor} />
+        tabBarIcon: ({tintColor}) => (
+          <Icon name={"settings"} size={20} color={tintColor}/>
         )
       }
     }

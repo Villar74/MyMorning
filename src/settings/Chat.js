@@ -64,7 +64,7 @@ import moment from 'moment';
 import api from '../components/Api';
 import {GiftedChat, Actions, Bubble, SystemMessage} from 'react-native-gifted-chat';
 import ImagePicker from 'react-native-image-picker';
-import { Icon } from 'react-native-elements'
+import {Icon} from 'react-native-elements'
 
 let options = {
   title: '',
@@ -102,17 +102,16 @@ export default class Chat extends React.Component {
   }
 
   componentWillMount() {
-
     this._isMounted = true;
-    this.getMessages()
-      .catch(() => {
-        api.createRoom()
-          .then(() => {
-            this.getMessages();
-          });
+    api.getRooms()
+      .then((answer)=>{
+        if (answer.rooms.length === 0){
+          api.createRoom()
+            .then(() => this.getMessages);
+        } else {
+          this.getMessages();
+        }
       });
-
-
   }
 
   componentWillUnmount() {
@@ -126,14 +125,17 @@ export default class Chat extends React.Component {
         answer.messages.forEach((item) => {
           messages.push({
             _id: item.id,
-            text: item.text[0]== 'd'? '': item.text,
+            text: item.body[0] == 'd' ? '' : item.body,
             createdAt: moment(item.createdAt).add(5, 'h').toDate(),
             user: {
-              _id: item.user._id,
+              _id: this.props.name === item.username? 0:1,
+              name: item.username,
             },
-            image: item.text[0]== 'd'? item.text: '',
+            image: item.body[0] == 'd' ? item.body : '',
+            createdAt: moment(item.datetime).toDate()
           });
         });
+
         messages = messages.reverse();
         this.setState({
           messages: messages,
@@ -156,7 +158,9 @@ export default class Chat extends React.Component {
 
   onSend(messages = []) {
     this.setState((previousState) => {
-      api.sendMessage(messages[0].text, this.props.navigation.state.params.name);
+      console.log(this.props.name);
+
+      api.sendMessage(messages[0].text, this.props.name);
 
       return {
         messages: GiftedChat.append(previousState.messages, messages),
@@ -257,7 +261,7 @@ export default class Chat extends React.Component {
     return null;
   }
 
-  handleOpenCameraRoll= (props) =>{
+  handleOpenCameraRoll = (props) => {
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -269,7 +273,7 @@ export default class Chat extends React.Component {
         console.log('User tapped custom button: ', response.customButton);
       }
       else {
-        api.sendMessage('data:image/png;base64,' + response.data, 1);//todo починить отправку
+        api.sendMessage('data:image/png;base64,' + response.data, this.props.name);//todo починить отправку
       }
     });
   };
@@ -301,17 +305,24 @@ export default class Chat extends React.Component {
       fullImage = (
         <View style={styles.overlay}>
           <Image
-            onLoadEnd={()=>{this.setState({visibleIndicator:false});}}
-            onLoadStart={()=>{this.setState({visibleIndicator:true});}}
+            onLoadEnd={() => {
+              this.setState({visibleIndicator: false});
+            }}
+            onLoadStart={() => {
+              this.setState({visibleIndicator: true});
+            }}
             resizeMode="contain"
             source={{uri: this.state.imageUri}}
-            style={[{ width: '100%',
+            style={[{
+              width: '100%',
               height: '100%',
             }]}
           />
           <TouchableOpacity
             style={styles.overlayCancel}
-            onPress={()=>{this.setState({visibleModal:false, imageUri:''});}}
+            onPress={() => {
+              this.setState({visibleModal: false, imageUri: ''});
+            }}
           >
 
             <Icon name={'close'} size={28}/>
@@ -325,27 +336,33 @@ export default class Chat extends React.Component {
 
   render() {
     return (
-      <View style={[{flex:1}]}>
-      <GiftedChat
-        messages={this.state.messages}
-        onSend={this.onSend}
-        loadEarlier={this.state.loadEarlier}
-        onLoadEarlier={this.onLoadEarlier}
-        isLoadingEarlier={this.state.isLoadingEarlier}
-        renderMessageImage={this.renderImageMessage}
-        user={{
-          _id: 1, // sent messages should have same user._id
-        }}
-        onPressActionButton={this.handleOpenCameraRoll}
-        renderBubble={this.renderBubble}
-        renderSystemMessage={this.renderSystemMessage}
-        renderFooter={this.renderFooter}
-      />
+      <View style={[{flex: 1}]}>
+        <GiftedChat
+          messages={this.state.messages}
+          onSend={this.onSend}
+          loadEarlier={this.state.loadEarlier}
+          onLoadEarlier={this.onLoadEarlier}
+          isLoadingEarlier={this.state.isLoadingEarlier}
+          renderMessageImage={this.renderImageMessage}
+          user={{
+            _id: 0,
+            name: this.props.name, // sent messages should have same user._id
+          }}
+          onPressActionButton={this.handleOpenCameraRoll}
+          renderBubble={this.renderBubble}
+          renderSystemMessage={this.renderSystemMessage}
+          renderFooter={this.renderFooter}
+        />
         {this.showFullImage()}
       </View>
     );
   }
 }
+
+
+Chat.defaultProps = {
+  name: 'John Sena'
+};
 
 const styles = StyleSheet.create({
   footerContainer: {
@@ -358,14 +375,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#aaa',
   },
-  overlay:{
+  overlay: {
     position: 'absolute',
     backgroundColor: 'rgba(0,0,0,0.7)',
     justifyContent: 'center',
     top: 0,
     left: 0,
-    right:0,
-    bottom:0
+    right: 0,
+    bottom: 0
   },
   overlayCancel: {
     padding: 20,

@@ -46,8 +46,12 @@ class IsApi {
     return this._exec('GET', '/rooms/0/messages');
   }
 
+  getRooms() {
+    return this._exec('GET', '/rooms?searchString=1');
+  }
+
   sendMessage(message, userName) {
-    return this._exec('POST', '/rooms/0/messages', {"body": message, "id": userName});
+    return this._exec('POST', '/rooms/0/messages', {"body": message, "username": userName});
   }
 
   createRoom() {

@@ -1,36 +1,30 @@
 import React, { Component } from "react";
-import { Text, View, Alert } from "react-native";
+import { Text, View, Alert, TextInput } from "react-native";
 import { Button } from "react-native-elements";
 
 export default class Settings extends Component<{}> {
-  goToChat = () => {
-    const {navigate} = this.props.navigation;
 
-    Alert.alert('Кто ты?', '', [
-      {
-        text: 'Катя', onPress: () => {
-          navigate('Stack', {name: 1})
-
-        }
-      },
-      {
-        text: 'Макс', onPress: () => {
-          navigate('Stack', {name: 2})
-        }
-      }
-    ]);
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      name: '',
+    }
+  }
+//todo сохранять имена
   render() {
     const {navigate} = this.props.navigation;
 
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Settings</Text>
+        <Text>Твое имя</Text>
+        <TextInput style={[{width: '50%'}]} value={this.state.name} onChangeText={(name) => this.setState({name})}/>
         <Button
           icon={{ name: "squirrel", type: "octicon" }}
           title="Открыть чат"
           backgroundColor={"#538aff"}
-          onPress={() => {this.goToChat();}}
+          onPress={() => {
+            navigate('Chat', {name: {name: this.state.name}})
+          }}
         />
       </View>
     );
